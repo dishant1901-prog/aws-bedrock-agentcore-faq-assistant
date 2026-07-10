@@ -1,179 +1,244 @@
 # 🤖 AWS Bedrock AgentCore AI FAQ Assistant with Persistent Memory
 
-This crash course is a hands-on introduction to **Amazon Bedrock AgentCore**, a fully managed service for building and deploying intelligent agents. This repository contains progressive examples demonstrating how to build AI agents that leverage language models, RAG (Retrieval-Augmented Generation), and memory management.
+An AI-powered FAQ Assistant built using **AWS Bedrock AgentCore Runtime**, **LangGraph**, **LangChain**, **FAISS**, **FastEmbed**, **Groq LLM**, and **Amazon Bedrock AgentCore Memory**.
 
-## 📚 Course Structure
+The assistant performs semantic search over a custom FAQ knowledge base using Retrieval-Augmented Generation (RAG) while maintaining long-term conversational memory across user sessions.
 
-This course includes three example implementations of increasing complexity:
+---
 
-1. **`00_langgraph_agent.py`** - Basic LangGraph agent with FAQ search capabilities using LangChain
-2. **`01_agentcore_runtime.py`** - AgentCore runtime integration with tool-based FAQ search and query reformulation
-3. **`02_agentcore_memory.py`** - Advanced agent with memory management for maintaining conversation history and user preferences
+## 🚀 Features
 
-Each example uses the **Lauki Q&A dataset** (`lauki_qna.csv`) as a knowledge base for the agent to search and provide answers to user questions.
+- ✅ AI-powered FAQ Assistant
+- ✅ Semantic Search using FAISS Vector Database
+- ✅ FastEmbed Embeddings for lightweight deployment
+- ✅ Groq GPT-OSS-20B Large Language Model
+- ✅ LangGraph Agent with Tool Calling
+- ✅ AWS Bedrock AgentCore Runtime Deployment
+- ✅ Amazon Bedrock AgentCore Memory Integration
+- ✅ Long-Term User Memory
+- ✅ Multi-tool Retrieval Workflow
+- ✅ Production-ready Cloud Deployment
 
-## 🛠️ **Set-up & Pre-requisites**
+---
 
-### System Requirements
+## 🏗️ Architecture
 
-- **Python**: 3.13 or newer (see [python.org/downloads](https://www.python.org/downloads/) to install)
-- **Operating System**: Windows, macOS, or Linux
-- **uv**: Ultra-fast Python package installer and resolver
-
-Check your Python version:
-```bash
-python --version
+```
+                   User
+                     │
+                     ▼
+        AWS Bedrock AgentCore Runtime
+                     │
+                     ▼
+              LangGraph Agent
+                     │
+      ┌──────────────┼──────────────┐
+      │              │              │
+      ▼              ▼              ▼
+ FastEmbed       FAISS Vector     Groq LLM
+ Embeddings       Database      (GPT-OSS-20B)
+                     │
+                     ▼
+         AgentCore Persistent Memory
 ```
 
-Install uv:
-```bash
-pip install uv
+---
+
+## 🛠️ Tech Stack
+
+| Category | Technology |
+|----------|------------|
+| Language | Python 3.13 |
+| Framework | LangGraph |
+| Agent Framework | LangChain |
+| Embeddings | FastEmbed |
+| Vector Database | FAISS |
+| LLM | Groq (GPT-OSS-20B) |
+| Cloud Runtime | AWS Bedrock AgentCore |
+| Persistent Memory | AWS Bedrock AgentCore Memory |
+| Dependency Management | UV |
+| Deployment | Docker + AWS Bedrock AgentCore |
+
+---
+
+## 📂 Project Structure
+
 ```
-Or follow the [uv installation guide](https://docs.astral.sh/uv/getting-started/installation/)
-
-### AWS Account & Credentials
-
-- An **AWS account** with access to Amazon Bedrock
-- **AWS credentials** configured (see [AWS CLI Configuration](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-quickstart.html))
-- Region set to a supported AgentCore region (e.g., `ap-southeast-2`, `us-east-1`)
-
-### API Keys
-
-- **GROQ API Key**: Required for accessing the Groq LLM service
-  - Sign up at [console.groq.com](https://console.groq.com)
-  - Create an API key in your account settings
-
-## 📦 Installation
-
-### Step 1: Clone or Download the Repository
-
-```bash
-cd agentcore-crash-course
+.
+├── 00_langgraph_agent.py
+├── 01_agentcore_runtime.py
+├── 02_agentcore_memory.py
+├── lauki_qna.csv
+├── pyproject.toml
+├── uv.lock
+├── README.md
+├── .sample_env
+└── .gitignore
 ```
 
-### Step 2: Install Dependencies
+---
 
-#### Option A: Using uv with pyproject.toml (Recommended)
+## ⚙️ Installation
+
+Clone the repository
+
+```bash
+git clone https://github.com/dishant1901-prog/aws-bedrock-agentcore-faq-assistant.git
+
+cd aws-bedrock-agentcore-faq-assistant
+```
+
+Install dependencies
 
 ```bash
 uv sync
 ```
 
-This installs all dependencies specified in `pyproject.toml`.
+---
 
-### Step 3: Configure Environment Variables
+## 🔑 Environment Variables
 
-Create a `.env` file in the project root directory:
-
-```bash
-touch .env
-```
-
-Add your API keys:
+Create a `.env` file using `.sample_env` as reference.
 
 ```env
-GROQ_API_KEY=your_groq_api_key_here
-HF_API_KEY=your_huggingface_api_key_here
+HF_TOKEN=your_huggingface_token
+GROQ_API_KEY=your_groq_api_key
+MEMORY_ID=your_agentcore_memory_id
 ```
 
-## ▶️ Running the Agents
+---
 
-### Example 1: Basic LangGraph Agent
+## ▶️ Run Locally
 
-A simple agent implementation using LangGraph with FAQ search capabilities:
+### LangGraph Agent
 
 ```bash
-python 00_langgraph_agent.py
+uv run python 00_langgraph_agent.py
 ```
 
-This will run an agent that answers the question "Explain roaming activation" using semantic search over the FAQ knowledge base.
-
-### Example 2: AgentCore Runtime Agent
-
-An agent deployed in the AgentCore runtime with tool-based search and query reformulation:
+### AgentCore Runtime
 
 ```bash
-agentcore configure -e 01_agentcore_runtime.py
+uv run python 01_agentcore_runtime.py
 ```
 
-This generates `bedrock_agentcore.yaml` with tool definitions and agent configuration.
-
-Deploy the agent:
+### AgentCore Memory
 
 ```bash
-agentcore launch --env GROQ_API_KEY=your_groq_api_key_here
+uv run python 02_agentcore_memory.py
 ```
 
-Test the deployed agent:
+---
+
+## ☁️ Deploy to AWS Bedrock AgentCore
+
+Deploy the runtime using AgentCore Toolkit.
 
 ```bash
-agentcore invoke '{"prompt": "Explain roaming activation"}'
+agentcore launch
 ```
 
-This example demonstrates:
-
-- Tool definitions for FAQ search
-- Query reformulation for complex questions
-- AgentCore entrypoint for production deployment
-
-### Example 3: AgentCore with Memory
-
-An advanced agent with conversation memory and user preferences:
+Invoke the deployed runtime
 
 ```bash
-agentcore configure -e 02_agentcore_memory.py
+agentcore invoke '{"prompt":"Tell me about roaming activation."}'
 ```
 
-This generates the agent configuration with memory management settings.
+---
 
-Deploy the agent:
+## 💬 Example Queries
 
-```bash
-agentcore launch --env GROQ_API_KEY=your_groq_api_key_here
+- Explain roaming activation.
+- What roaming packs are available?
+- How do I activate international roaming?
+- What happens after my roaming pack expires?
+- Tell me about data roaming.
+
+---
+
+## 🧠 Persistent Memory Example
+
+User:
+
+```
+My name is Dishant.
 ```
 
-Test the deployed agent:
+Later:
 
-```bash
-agentcore invoke '{"prompt": "Remember my preference and answer my question"}'
+```
+What is my name?
 ```
 
-This example demonstrates:
+The assistant retrieves the stored information using **Amazon Bedrock AgentCore Memory** and responds with the remembered user information.
 
-- Persistent memory using AgentCore Memory
-- Pre and post-model hooks for memory management
-- Session-based conversation tracking
-- User preference retrieval
+---
 
-## ⚙️ Troubleshooting
+## 📸 Demo
 
-### Issue: Python version error
-**Solution**: Ensure you have Python 3.13 or newer installed:
-```bash
-python --version
-```
+A complete demonstration of the project is available on my LinkedIn profile.
 
-### Issue: Missing `GROQ_API_KEY`
-**Solution**: Verify your `.env` file contains the key and is in the project root:
-```bash
-cat .env
-```
+The demo showcases:
 
-### Issue: FAISS installation fails
-**Solution**: Install the CPU version explicitly:
-```bash
-uv pip install --upgrade faiss-cpu
-```
+- Semantic FAQ Retrieval
+- AWS Bedrock AgentCore Runtime Deployment
+- AgentCore Memory Integration
+- Long-Term Memory Retrieval
+- Cloud Deployment Workflow
 
-### Issue: AWS credentials not found
-**Solution**: Configure AWS credentials using AWS CLI:
-```bash
-aws configure
-```
+---
 
-## 📚 Additional Resources
+## 📈 Challenges Solved
 
-- [Amazon bedrock AgentCore](https://aws.amazon.com/bedrock/agentcore/?trk=33dad69a-efe5-4eb8-b3eb-bfdc0cf9a3c0&sc_channel=el)
-- [Amazon Bedrock AgentCore Documentation](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/agentcore-get-started-toolkit.html/?trk=33dad69a-efe5-4eb8-b3eb-bfdc0cf9a3c0&sc_channel=el)
-- [Amazon Bedrock Agentcore Samples](https://github.com/awslabs/amazon-bedrock-agentcore-samples)
+During development, several practical deployment challenges were addressed:
 
+- Docker image exceeded AWS AgentCore runtime size limits.
+- Replaced SentenceTransformers with FastEmbed to significantly reduce deployment size.
+- Integrated persistent memory using Amazon Bedrock AgentCore Memory.
+- Configured LangGraph agents for production deployment.
+- Built a lightweight semantic retrieval pipeline optimized for cloud deployment.
+
+---
+
+## 🔮 Future Improvements
+
+- Hybrid Search (Keyword + Semantic)
+- Streaming Responses
+- Multi-Agent Collaboration
+- Authentication & User Profiles
+- Web Interface using Streamlit
+- Amazon Bedrock Guardrails Integration
+- MCP Tool Support
+
+---
+
+## 📚 Technologies Used
+
+- AWS Bedrock AgentCore Runtime
+- AWS Bedrock AgentCore Memory
+- LangGraph
+- LangChain
+- FAISS
+- FastEmbed
+- Groq API
+- Python
+- Docker
+- UV Package Manager
+
+---
+
+## 👨‍💻 Author
+
+**Dishant Kaushik**
+
+GitHub:
+https://github.com/dishant1901-prog
+
+LinkedIn:
+(Add your LinkedIn profile here)
+
+---
+
+## ⭐ If you found this project useful
+
+Please consider giving the repository a ⭐ on GitHub.
