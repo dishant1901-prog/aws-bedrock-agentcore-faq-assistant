@@ -235,7 +235,7 @@ GitHub:
 https://github.com/dishant1901-prog
 
 LinkedIn:
-(Add your LinkedIn profile here)
+https://www.linkedin.com/in/dishant-kaushik-8691641ba/
 
 ---
 
