@@ -235,7 +235,7 @@ GitHub:
 https://github.com/dishant1901-prog
 
 LinkedIn:
-(Add your LinkedIn profile here)
+https://www.linkedin.com/posts/dishant-kaushik-8691641ba_aws-amazonbedrock-agentcore-activity-7481472573755551744-mNlS?utm_source=share&utm_medium=member_desktop&rcm=ACoAADLssdEBJAO36jSStJTpoQhyMyMfr3ReRgQ
 
 ---
 
